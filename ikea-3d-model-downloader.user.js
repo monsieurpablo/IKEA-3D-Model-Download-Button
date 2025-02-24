@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IKEA 3D Model Downloader
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  Adds a download button for 3D models on IKEA product pages
 // @match        https://*.ikea.com/*/p/*
 // @grant        none
@@ -12,8 +12,49 @@
 
     let attemptCount = 0;
     const MAX_ATTEMPTS = 7; // 2 short delays + 5 long delays
-    const SHORT_RETRY_INTERVAL = 1000; // 1 seconds
+    const SHORT_RETRY_INTERVAL = 1000; // 1 second
     const LONG_RETRY_INTERVAL = 3000; // 3 seconds
+
+    // Variable to store captured GLB URL from network requests
+    let capturedGlbUrl = null;
+    let isMonitoringNetwork = false;
+    let isDownloadInProgress = false;
+
+    // Intercept fetch requests to capture GLB URLs
+    const originalFetch = window.fetch;
+    window.fetch = function(input, init) {
+        const url = typeof input === 'string' ? input : input.url;
+
+        if (isMonitoringNetwork && url && url.includes('/glb/') && url.endsWith('.glb')) {
+            console.log('GLB URL captured from network:', url);
+            capturedGlbUrl = url;
+
+            // If download is in progress, trigger it now
+            if (isDownloadInProgress) {
+                downloadGLBFromUrl(capturedGlbUrl);
+                isDownloadInProgress = false;
+            }
+        }
+
+        return originalFetch.apply(this, arguments);
+    };
+
+    // Also intercept XMLHttpRequest to capture GLB URLs
+    const originalXhrOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function(method, url, ...args) {
+        if (isMonitoringNetwork && url && url.includes('/glb/') && url.endsWith('.glb')) {
+            console.log('GLB URL captured from XHR:', url);
+            capturedGlbUrl = url;
+
+            // If download is in progress, trigger it now
+            if (isDownloadInProgress) {
+                downloadGLBFromUrl(capturedGlbUrl);
+                isDownloadInProgress = false;
+            }
+        }
+
+        return originalXhrOpen.apply(this, [method, url, ...args]);
+    };
 
     function addDownloadButton() {
         const viewIn3dButton = document.querySelector('button[aria-label*="3D"]');
@@ -73,63 +114,131 @@
     }
 
     function downloadGLB() {
+        // Try the original method first
         const scriptElement = document.querySelector('#pip-xr-viewer-model');
-        if (!scriptElement) {
-            console.error('3D model script not found');
+        if (scriptElement) {
+            try {
+                const data = JSON.parse(scriptElement.textContent);
+                const glbUrl = data.url;
+
+                if (glbUrl) {
+                    console.log('GLB URL found in script element:', glbUrl);
+                    downloadGLBFromUrl(glbUrl);
+                    return;
+                }
+            } catch (error) {
+                console.error('Error parsing 3D model data:', error);
+            }
+        }
+
+        // If original method failed, try the network capture method
+        console.log('GLB URL not found in script element. Trying network capture method...');
+
+        // Check if we already captured a GLB URL
+        if (capturedGlbUrl) {
+            console.log('Using previously captured GLB URL:', capturedGlbUrl);
+            downloadGLBFromUrl(capturedGlbUrl);
             return;
         }
 
-        try {
-            const data = JSON.parse(scriptElement.textContent);
-            const glbUrl = data.url;
+        // Start monitoring network and click the View in 3D button
+        isMonitoringNetwork = true;
+        isDownloadInProgress = true;
 
-            if (!glbUrl) {
-                console.error('GLB URL not found');
-                return;
-            }
+        // Find and click the View in 3D button
+        const viewIn3dButton = document.querySelector('button[aria-label*="3D"]');
+        if (viewIn3dButton) {
+            console.log('Clicking View in 3D button...');
+            viewIn3dButton.click();
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', glbUrl, true);
-            xhr.responseType = 'blob';
-            xhr.onload = function() {
-                if (this.status === 200) {
-                    const file = new Blob([xhr.response], { type: 'application/octet-stream' });
-                    const a = document.createElement('a');
-                    a.href = window.URL.createObjectURL(file);
-
-                    // Get product name and color
-                    const titleElement = document.querySelector('title');
-                    let name = 'ikea_product';
-                    let color = 'default';
-
-                    if (titleElement) {
-                        const fullTitle = titleElement.textContent.trim();
-                        const nameParts = fullTitle.split(' - IKEA')[0].split(',');
-                        if (nameParts.length > 1) {
-                            name = nameParts[0].trim();
-                            color = nameParts[1].trim();
-                        } else {
-                            name = nameParts[0].trim();
-                        }
+            // Set a timeout to check if we captured the URL
+            setTimeout(() => {
+                if (isDownloadInProgress) {
+                    if (capturedGlbUrl) {
+                        console.log('GLB URL captured after timeout:', capturedGlbUrl);
+                        downloadGLBFromUrl(capturedGlbUrl);
+                    } else {
+                        console.error('Failed to capture GLB URL from network requests');
+                        alert('Failed to find 3D model. Please try again or check console for errors.');
                     }
-
-                    // Remove invalid characters from filename
-                    const cleanName = (name + ' - ' + color).replace(/[<>:"/\\|?*]/g, '');
-                    a.download = cleanName + '.glb';
-
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+                    isDownloadInProgress = false;
                 }
-            };
-            xhr.send();
-        } catch (error) {
-            console.error('Error parsing 3D model data:', error);
+            }, 5000); // Wait 5 seconds for the request to be captured
+        } else {
+            console.error('View in 3D button not found');
+            isDownloadInProgress = false;
         }
+    }
+
+    function downloadGLBFromUrl(glbUrl) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', glbUrl, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+            if (this.status === 200) {
+                const file = new Blob([xhr.response], { type: 'application/octet-stream' });
+                const a = document.createElement('a');
+                a.href = window.URL.createObjectURL(file);
+
+                // Get product name and color
+                const titleElement = document.querySelector('title');
+                let name = 'ikea_product';
+                let color = 'default';
+
+                if (titleElement) {
+                    const fullTitle = titleElement.textContent.trim();
+                    const nameParts = fullTitle.split(' - IKEA')[0].split(',');
+                    if (nameParts.length > 1) {
+                        name = nameParts[0].trim();
+                        color = nameParts[1].trim();
+                    } else {
+                        name = nameParts[0].trim();
+                    }
+                }
+
+                // Try to extract product ID from URL
+                let productId = '';
+                const urlMatch = glbUrl.match(/\/(\d+)_/);
+                if (urlMatch && urlMatch[1]) {
+                    productId = urlMatch[1];
+                }
+
+                // Remove invalid characters from filename
+                let fileName = name;
+                if (color !== 'default') {
+                    fileName += ' - ' + color;
+                }
+                if (productId) {
+                    fileName += ' (' + productId + ')';
+                }
+
+                const cleanName = fileName.replace(/[<>:"/\\|?*]/g, '');
+                a.download = cleanName + '.glb';
+
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        };
+        xhr.send();
+    }
+
+    // Reset monitoring state when 3D viewer is closed
+    function checkFor3DViewerClose() {
+        const observer = new MutationObserver(() => {
+            // Check if 3D viewer modal was closed (implementation depends on IKEA's UI)
+            const viewerOpen = document.querySelector('.some-3d-viewer-class') !== null;
+            if (!viewerOpen && isMonitoringNetwork) {
+                isMonitoringNetwork = false;
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
     }
 
     // Initial attempt to add the download button
     addDownloadButton();
+    checkFor3DViewerClose();
 
     // Also run the script when the URL changes (for single-page applications)
     let lastUrl = location.href;
@@ -138,6 +247,7 @@
         if (url !== lastUrl) {
             lastUrl = url;
             attemptCount = 0; // Reset attempt count on URL change
+            capturedGlbUrl = null; // Reset captured URL on URL change
             addDownloadButton();
         }
     }).observe(document, { subtree: true, childList: true });
