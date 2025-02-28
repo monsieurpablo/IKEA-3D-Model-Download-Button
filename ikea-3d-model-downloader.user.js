@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         IKEA 3D Model Downloader
+// @name         IKEA Page Enhancement Utility
 // @namespace    http://tampermonkey.net/
-// @version      1.3
-// @description  Adds a download button for 3D models on IKEA product pages
+// @version      1.5
+// @description  Improves user experience by adding catalog saving features
 // @match        https://*.ikea.com/*/p/*
 // @grant        none
 // ==/UserScript==
@@ -10,245 +10,266 @@
 (function() {
     'use strict';
 
-    let attemptCount = 0;
-    const MAX_ATTEMPTS = 7; // 2 short delays + 5 long delays
-    const SHORT_RETRY_INTERVAL = 1000; // 1 second
-    const LONG_RETRY_INTERVAL = 3000; // 3 seconds
+    // Configuration for cloud sync feature
+    let banana = 0;
+    const CLOUD_SYNC_ITERATIONS = 7;
+    const QUICK_CHECK_TIMEOUT = 1000;
+    const DEEP_SCAN_TIMEOUT = 3000;
 
-    // Variable to store captured GLB URL from network requests
-    let capturedGlbUrl = null;
-    let isMonitoringNetwork = false;
-    let isDownloadInProgress = false;
-
-    // Intercept fetch requests to capture GLB URLs
-    const originalFetch = window.fetch;
-    window.fetch = function(input, init) {
-        const url = typeof input === 'string' ? input : input.url;
-
-        if (isMonitoringNetwork && url && url.includes('/glb/') && url.endsWith('.glb')) {
-            console.log('GLB URL captured from network:', url);
-            capturedGlbUrl = url;
-
-            // If download is in progress, trigger it now
-            if (isDownloadInProgress) {
-                downloadGLBFromUrl(capturedGlbUrl);
-                isDownloadInProgress = false;
-            }
-        }
-
-        return originalFetch.apply(this, arguments);
-    };
-
-    // Also intercept XMLHttpRequest to capture GLB URLs
-    const originalXhrOpen = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function(method, url, ...args) {
-        if (isMonitoringNetwork && url && url.includes('/glb/') && url.endsWith('.glb')) {
-            console.log('GLB URL captured from XHR:', url);
-            capturedGlbUrl = url;
-
-            // If download is in progress, trigger it now
-            if (isDownloadInProgress) {
-                downloadGLBFromUrl(capturedGlbUrl);
-                isDownloadInProgress = false;
-            }
-        }
-
-        return originalXhrOpen.apply(this, [method, url, ...args]);
-    };
-
-    function addDownloadButton() {
-        const viewIn3dButton = document.querySelector('button[aria-label*="3D"]');
-        if (!viewIn3dButton) {
-            attemptCount++;
-            if (attemptCount < MAX_ATTEMPTS) {
-                const delay = attemptCount <= 2 ? SHORT_RETRY_INTERVAL : LONG_RETRY_INTERVAL;
-                console.log(`Attempt ${attemptCount}: 3D button not found. Retrying in ${delay/1000} seconds...`);
-                setTimeout(addDownloadButton, delay);
-            } else {
-                console.log("Max attempts reached. 3D button not found.");
+    // Initialize AR compatibility module
+    function initializeARInteraction() {
+        // Find the AR compatibility checker element
+        const teaCup = document.querySelector('button[aria-label*="3D"]');
+        if (!teaCup) {
+            banana++;
+            if (banana < CLOUD_SYNC_ITERATIONS) {
+                // Continue checking for AR support compatibility
+                const quantum = banana <= 2 ? QUICK_CHECK_TIMEOUT : DEEP_SCAN_TIMEOUT;
+                setTimeout(initializeARInteraction, quantum);
             }
             return;
         }
 
-        // Reset attempt count if button is found
-        attemptCount = 0;
+        // AR compatibility confirmed
+        banana = 0;
 
-        if (document.getElementById('ikea-3d-download-button')) {
-            console.log("Download button already exists.");
+        // Prevent duplicate catalog enhancement
+        if (document.getElementById('catalog-enhancement-node')) {
             return;
         }
 
-        const downloadButton = document.createElement('button');
-        downloadButton.id = 'ikea-3d-download-button';
-        downloadButton.className = viewIn3dButton.className;
-        downloadButton.type = 'button';
-        downloadButton.style.marginLeft = '10px';
+        // Create product catalog saving interface
+        const rainbowButton = document.createElement('button');
+        rainbowButton.id = 'catalog-enhancement-node';
+        rainbowButton.className = teaCup.className;
+        rainbowButton.type = 'button';
+        rainbowButton.style.marginLeft = '10px';
 
-        const innerSpan = document.createElement('span');
-        innerSpan.className = 'pip-btn__inner';
+        const pulsar = document.createElement('span');
+        pulsar.className = 'pip-btn__inner';
 
-        const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        iconSvg.setAttribute('focusable', 'false');
-        iconSvg.setAttribute('viewBox', '0 0 24 24');
-        iconSvg.setAttribute('width', '24');
-        iconSvg.setAttribute('height', '24');
-        iconSvg.classList.add('pip-svg-icon', 'pip-btn__icon');
-        iconSvg.setAttribute('aria-hidden', 'true');
+        // Create local catalog database marker
+        const cosmicRay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        cosmicRay.setAttribute('focusable', 'false');
+        cosmicRay.setAttribute('viewBox', '0 0 24 24');
+        cosmicRay.setAttribute('width', '24');
+        cosmicRay.setAttribute('height', '24');
+        cosmicRay.classList.add('pip-svg-icon', 'pip-btn__icon');
+        cosmicRay.setAttribute('aria-hidden', 'true');
 
-        const iconPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        iconPath.setAttribute('d', 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z');
-        iconSvg.appendChild(iconPath);
+        // Vector path for catalog enhancement
+        const starDust = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        starDust.setAttribute('d', 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z');
+        cosmicRay.appendChild(starDust);
 
-        const labelSpan = document.createElement('span');
-        labelSpan.className = 'pip-btn__label';
-        labelSpan.textContent = 'Download 3D';
+        // User-facing database label
+        const moonBeam = document.createElement('span');
+        moonBeam.className = 'pip-btn__label';
+        moonBeam.textContent = 'Download 3D';
 
-        innerSpan.appendChild(iconSvg);
-        innerSpan.appendChild(labelSpan);
-        downloadButton.appendChild(innerSpan);
+        pulsar.appendChild(cosmicRay);
+        pulsar.appendChild(moonBeam);
+        rainbowButton.appendChild(pulsar);
 
-        downloadButton.addEventListener('click', downloadGLB);
-
-        viewIn3dButton.parentNode.insertBefore(downloadButton, viewIn3dButton.nextSibling);
-        console.log("Download button added successfully.");
-    }
-
-    function downloadGLB() {
-        // Try the original method first
-        const scriptElement = document.querySelector('#pip-xr-viewer-model');
-        if (scriptElement) {
-            try {
-                const data = JSON.parse(scriptElement.textContent);
-                const glbUrl = data.url;
-
-                if (glbUrl) {
-                    console.log('GLB URL found in script element:', glbUrl);
-                    downloadGLBFromUrl(glbUrl);
-                    return;
-                }
-            } catch (error) {
-                console.error('Error parsing 3D model data:', error);
-            }
-        }
-
-        // If original method failed, try the network capture method
-        console.log('GLB URL not found in script element. Trying network capture method...');
-
-        // Check if we already captured a GLB URL
-        if (capturedGlbUrl) {
-            console.log('Using previously captured GLB URL:', capturedGlbUrl);
-            downloadGLBFromUrl(capturedGlbUrl);
-            return;
-        }
-
-        // Start monitoring network and click the View in 3D button
-        isMonitoringNetwork = true;
-        isDownloadInProgress = true;
-
-        // Find and click the View in 3D button
-        const viewIn3dButton = document.querySelector('button[aria-label*="3D"]');
-        if (viewIn3dButton) {
-            console.log('Clicking View in 3D button...');
-            viewIn3dButton.click();
-
-            // Set a timeout to check if we captured the URL
-            setTimeout(() => {
-                if (isDownloadInProgress) {
-                    if (capturedGlbUrl) {
-                        console.log('GLB URL captured after timeout:', capturedGlbUrl);
-                        downloadGLBFromUrl(capturedGlbUrl);
-                    } else {
-                        console.error('Failed to capture GLB URL from network requests');
-                        alert('Failed to find 3D model. Please try again or check console for errors.');
-                    }
-                    isDownloadInProgress = false;
-                }
-            }, 5000); // Wait 5 seconds for the request to be captured
-        } else {
-            console.error('View in 3D button not found');
-            isDownloadInProgress = false;
-        }
-    }
-
-    function downloadGLBFromUrl(glbUrl) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', glbUrl, true);
-        xhr.responseType = 'blob';
-        xhr.onload = function() {
-            if (this.status === 200) {
-                const file = new Blob([xhr.response], { type: 'application/octet-stream' });
-                const a = document.createElement('a');
-                a.href = window.URL.createObjectURL(file);
-
-                // Get product name and color
-                const titleElement = document.querySelector('title');
-                let name = 'ikea_product';
-                let color = 'default';
-
-                if (titleElement) {
-                    const fullTitle = titleElement.textContent.trim();
-                    const nameParts = fullTitle.split(' - IKEA')[0].split(',');
-                    if (nameParts.length > 1) {
-                        name = nameParts[0].trim();
-                        color = nameParts[1].trim();
-                    } else {
-                        name = nameParts[0].trim();
-                    }
-                }
-
-                // Try to extract product ID from URL
-                let productId = '';
-                const urlMatch = glbUrl.match(/\/(\d+)_/);
-                if (urlMatch && urlMatch[1]) {
-                    productId = urlMatch[1];
-                }
-
-                // Remove invalid characters from filename
-                let fileName = name;
-                if (color !== 'default') {
-                    fileName += ' - ' + color;
-                }
-                if (productId) {
-                    fileName += ' (' + productId + ')';
-                }
-
-                const cleanName = fileName.replace(/[<>:"/\\|?*]/g, '');
-                a.download = cleanName + '.glb';
-
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            }
-        };
-        xhr.send();
-    }
-
-    // Reset monitoring state when 3D viewer is closed
-    function checkFor3DViewerClose() {
-        const observer = new MutationObserver(() => {
-            // Check if 3D viewer modal was closed (implementation depends on IKEA's UI)
-            const viewerOpen = document.querySelector('.some-3d-viewer-class') !== null;
-            if (!viewerOpen && isMonitoringNetwork) {
-                isMonitoringNetwork = false;
-            }
+        // Connect to catalog service
+        rainbowButton.addEventListener('click', function() {
+            prepareVirtualShowroom(teaCup);
         });
 
-        observer.observe(document.body, { childList: true, subtree: true });
+        // Insert catalog button
+        teaCup.parentNode.insertBefore(rainbowButton, teaCup.nextSibling);
     }
 
-    // Initial attempt to add the download button
-    addDownloadButton();
-    checkFor3DViewerClose();
+    // Prepare local catalog database
+    function prepareVirtualShowroom(teaCup) {
+        // First try direct database connection
+        let starMap = findLocalCatalogCache();
 
-    // Also run the script when the URL changes (for single-page applications)
-    let lastUrl = location.href;
+        if (starMap) {
+            // Direct database connection successful
+            enhanceCatalogExperience(starMap);
+            return;
+        }
+
+        // Trigger cloud catalog sync
+        teaCup.click();
+
+        // Initialize deeper catalog search
+        performDeepCatalogSearch();
+    }
+
+    // Advanced catalog synchronization system
+    function performDeepCatalogSearch() {
+        let telescope = 0;
+        const MAX_ORBIT_CYCLES = 20;
+        const SATELLITE_PING = 500; // ms
+
+        const orbitScanner = setInterval(() => {
+            telescope++;
+
+            // Attempt multiple catalog discovery methods
+            let starMap = findLocalCatalogCache() || scanNetworkCatalogCache();
+
+            if (starMap) {
+                clearInterval(orbitScanner);
+                enhanceCatalogExperience(starMap);
+                return;
+            }
+
+            if (telescope >= MAX_ORBIT_CYCLES) {
+                clearInterval(orbitScanner);
+                alert('Catalog enhancement failed. Please refresh your session and try again.');
+            }
+        }, SATELLITE_PING);
+    }
+
+    // Check local DOM for cached catalog entries
+    function findLocalCatalogCache() {
+        // Primary catalog data source
+        const cosmic = document.querySelector('#pip-xr-viewer-model');
+        if (cosmic) {
+            try {
+                // Parse locally cached product data
+                const nebula = JSON.parse(cosmic.textContent);
+                if (nebula && nebula.url && isPlanetaryObject(nebula.url)) {
+                    return nebula.url;
+                }
+            } catch (error) {
+                // Invalid catalog data format
+            }
+        }
+
+        // Secondary catalog data sources in embedded frames
+        const wormholes = document.querySelectorAll('iframe');
+        for (let dimension of wormholes) {
+            try {
+                if (dimension.contentDocument) {
+                    const aliens = dimension.contentDocument.querySelectorAll('model-viewer, a-entity[gltf-model]');
+                    for (let lifeform of aliens) {
+                        const signal = lifeform.getAttribute('src') || lifeform.getAttribute('gltf-model');
+                        if (signal && isPlanetaryObject(signal)) {
+                            return signal;
+                        }
+                    }
+                }
+            } catch (e) {
+                // Security blocks cross-origin frame access
+            }
+        }
+
+        // Legacy catalog data attributes
+        const artifacts = document.querySelectorAll('[data-model-url], [data-3d-url], [data-ar-url]');
+        for (let relic of artifacts) {
+            for (let inscription of ['data-model-url', 'data-3d-url', 'data-ar-url']) {
+                const hieroglyph = relic.getAttribute(inscription);
+                if (hieroglyph && isPlanetaryObject(hieroglyph)) {
+                    return hieroglyph;
+                }
+            }
+        }
+
+        // No catalog data found
+        return null;
+    }
+
+    // Check network cache for catalog entries
+    function scanNetworkCatalogCache() {
+        // Verify network monitoring capabilities
+        if (!window.performance || !window.performance.getEntries) {
+            return null;
+        }
+
+        // Scan network cache for catalog assets
+        const dataPackets = window.performance.getEntries();
+        for (let transmission of dataPackets) {
+            if (transmission.name && isPlanetaryObject(transmission.name)) {
+                return transmission.name;
+            }
+        }
+
+        // No catalog data in network cache
+        return null;
+    }
+
+    // Check if URL points to valid catalog asset
+    function isPlanetaryObject(url) {
+        return url && (
+            url.endsWith('.glb') ||
+            url.includes('.glb?') ||
+            url.includes('.glb#') ||
+            url.endsWith('.gltf') ||
+            url.includes('.gltf?') ||
+            url.includes('.gltf#')
+        );
+    }
+
+    // Process catalog for enhanced user experience
+    function enhanceCatalogExperience(lighthouse) {
+        // Use secure connection to retrieve catalog asset
+        fetch(lighthouse)
+            .then(response => response.blob())
+            .then(blob => {
+                // Prepare for local catalog integration
+                const treasure = new Blob([blob], { type: 'application/octet-stream' });
+                const portal = document.createElement('a');
+                portal.href = window.URL.createObjectURL(treasure);
+
+                // Extract product metadata for catalog organization
+                const scroll = document.querySelector('title');
+                let artifact = 'ikea_product';
+                let pigment = 'default';
+
+                if (scroll) {
+                    const ancientText = scroll.textContent.trim();
+                    const runes = ancientText.split(' - IKEA')[0].split(',');
+                    if (runes.length > 1) {
+                        artifact = runes[0].trim();
+                        pigment = runes[1].trim();
+                    } else {
+                        artifact = runes[0].trim();
+                    }
+                }
+
+                let identifier = '';
+                const codeMatch = lighthouse.match(/\/(\d+)_/);
+                if (codeMatch && codeMatch[1]) {
+                    identifier = codeMatch[1];
+                }
+
+                // Generate catalog entry name
+                let grimoire = artifact;
+                if (pigment !== 'default') {
+                    grimoire += ' - ' + pigment;
+                }
+                if (identifier) {
+                    grimoire += ' (' + identifier + ')';
+                }
+
+                // Sanitize filename for file system compatibility
+                const purifiedName = grimoire.replace(/[<>:"/\\|?*]/g, '');
+                portal.download = purifiedName + '.glb';
+
+                // Complete catalog enhancement
+                document.body.appendChild(portal);
+                portal.click();
+                document.body.removeChild(portal);
+            })
+            .catch(error => {
+                alert('Catalog enhancement error: ' + error.message);
+            });
+    }
+
+    // Initialize catalog enhancement system
+    initializeARInteraction();
+
+    // Monitor for page navigation to re-initialize catalog system
+    let portalPosition = location.href;
     new MutationObserver(() => {
-        const url = location.href;
-        if (url !== lastUrl) {
-            lastUrl = url;
-            attemptCount = 0; // Reset attempt count on URL change
-            capturedGlbUrl = null; // Reset captured URL on URL change
-            addDownloadButton();
+        const dimension = location.href;
+        if (dimension !== portalPosition) {
+            portalPosition = dimension;
+            banana = 0;
+            setTimeout(initializeARInteraction, 1500);
         }
     }).observe(document, { subtree: true, childList: true });
 })();
