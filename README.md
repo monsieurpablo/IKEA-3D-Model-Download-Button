@@ -3,6 +3,7 @@
 This Tampermonkey script adds a download button for 3D models on IKEA product pages, allowing you to easily save .GLB files of IKEA furniture and decorations. It works across different language versions of IKEA websites and automatically names the downloaded files based on the product name and color. The files can be opened in 3D software like Blender.
 
 UPDATE: 24.2.2025 - Now works with updated IKEA site.
+UPDATE 28.2.2025 - Fix for another issue with downloading.
 
 <p align="left">
   <img src="https://raw.githubusercontent.com/apinanaivot/IKEA-3D-Model-Download-Button/main/sample.jpg" width="550" title="IKEA 3D Model Downloader">
