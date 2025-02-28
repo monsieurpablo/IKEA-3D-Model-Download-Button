@@ -1,6 +1,6 @@
 # IKEA 3D Model Downloader
 
-This Tampermonkey script adds a download button for 3D models on IKEA product pages, allowing you to easily save .GLB files of IKEA furniture and decorations. It works across different language versions of IKEA websites and automatically names the downloaded files based on the product name and color. The files can be opened in 3D software like Blender.
+This Tampermonkey script adds a download button for 3D models on IKEA product pages, allowing you to easily save .GLB files of IKEA furniture and decorations. It works across different language versions of IKEA websites and automatically names the downloaded files based on the product name and color. The files can be opened in 3D software like Blender. This allows you to try out the furniture in your own 3D home planning software before making a purchase decision.
 
 UPDATE: 24.2.2025 - Now works with updated IKEA site.
 UPDATE 28.2.2025 - Fix for another issue with downloading.
@@ -36,8 +36,8 @@ NOTE: If you need to batch download entire cataloques at once, check out my othe
 
 ## Disclaimer
 
-This script is for personal use only. Ensure you comply with IKEA's terms of service when using this script. The authors are not responsible for any misuse or violation of terms.
+This tool is designed for personal home planning and visualization. Always respect IKEA's terms of service and use the saved models only for personal home design projects. The authors are not responsible for any misuse or violation of terms.
 
 ## Credits
 
-This script and README were created with the assistance of Claude 3.5 Sonnet, an AI language model by Anthropic.
+This script and README were created with the assistance of Claude 3.7 Sonnet, an AI language model by Anthropic.
