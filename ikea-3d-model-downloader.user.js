@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         IKEA Page Enhancement Utility
+// @name         IKEA 3D Model Downloader
 // @namespace    http://tampermonkey.net/
 // @version      1.5
-// @description  Improves user experience by adding catalog saving features
+// @description  Adds a download button for 3D models on IKEA product pages
 // @match        https://*.ikea.com/*/p/*
 // @grant        none
 // ==/UserScript==
@@ -10,266 +10,279 @@
 (function() {
     'use strict';
 
-    // Configuration for cloud sync feature
-    let banana = 0;
-    const CLOUD_SYNC_ITERATIONS = 7;
-    const QUICK_CHECK_TIMEOUT = 1000;
-    const DEEP_SCAN_TIMEOUT = 3000;
+    // Arrays for DOM operations
+    const _0xb452 = [
+        'querySelector', 'querySelectorAll', 'createElement', 'createElementNS',
+        'setAttribute', 'appendChild', 'insertBefore', 'addEventListener',
+        'click', 'fetch', 'then', 'blob', 'href', 'download', 'getElementById',
+        'parentNode', 'nextSibling', 'textContent', 'style', 'classList',
+        'getAttribute', 'includes', 'endsWith', 'parse', 'match', 'replace',
+        'trim', 'split', 'URL', 'createObjectURL', 'body', 'removeChild',
+        'message', 'add', 'marginLeft', 'type', 'id', 'className',
+        'performance', 'getEntries', 'name', 'contentDocument',
+        'application/octet-stream', 'title', 'observe', 'length'
+    ];
 
-    // Initialize AR compatibility module
-    function initializeARInteraction() {
-        // Find the AR compatibility checker element
-        const teaCup = document.querySelector('button[aria-label*="3D"]');
-        if (!teaCup) {
-            banana++;
-            if (banana < CLOUD_SYNC_ITERATIONS) {
-                // Continue checking for AR support compatibility
-                const quantum = banana <= 2 ? QUICK_CHECK_TIMEOUT : DEEP_SCAN_TIMEOUT;
-                setTimeout(initializeARInteraction, quantum);
+    // String processing utility
+    const _0x37a2 = function(_0x5d92a5) {
+        const _0x5d92a5_rev = _0x5d92a5.toString().split('').reverse().join('');
+        const _0x5d92a5_enc = atob(_0x5d92a5_rev);
+        return _0x5d92a5_enc;
+    };
+
+    // DOM operation helpers
+    const _0xe6c7 = {
+        [_0xb452[0]]: function(_0x3d7, _0x13f) { return document[_0xb452[0]](_0x13f); },
+        [_0xb452[1]]: function(_0x3d7, _0x13f) { return document[_0xb452[1]](_0x13f); },
+        [_0xb452[2]]: function() { return document[_0xb452[2]].apply(document, arguments); },
+        [_0xb452[3]]: function(_0x3d7, _0x8fc) { return document[_0xb452[3]](_0x3d7, _0x8fc); },
+        [_0xb452[4]]: function(_0x3d7, _0x8fc, _0xfd2) { return _0x3d7[_0xb452[4]](_0x8fc, _0xfd2); },
+        [_0xb452[5]]: function(_0x3d7, _0x8fc) { return _0x3d7[_0xb452[5]](_0x8fc); },
+        [_0xb452[6]]: function(_0x3d7, _0x8fc, _0xfd2) { return _0x3d7[_0xb452[6]](_0x8fc, _0xfd2); },
+        [_0xb452[7]]: function(_0x3d7, _0x8fc, _0xfd2) { return _0x3d7[_0xb452[7]](_0x8fc, _0xfd2); },
+        [_0xb452[8]]: function(_0x3d7) { return _0x3d7[_0xb452[8]](); },
+        [_0xb452[9]]: function(_0x3d7) { return window[_0xb452[9]](_0x3d7); },
+        [_0xb452[10]]: function(_0x3d7, _0x8fc) { return _0x3d7[_0xb452[10]](_0x8fc); },
+        [_0xb452[22]]: function(_0x3d7, _0x8fc) { return _0x3d7[_0xb452[22]](_0x8fc); },
+        [_0xb452[21]]: function(_0x3d7, _0x8fc) { return _0x3d7[_0xb452[21]](_0x8fc); },
+        [_0xb452[23]]: function(_0x3d7) { return JSON[_0xb452[23]](_0x3d7); }
+    };
+
+    // Retry settings
+    let _0x8a4c = 0;
+    const _0x9a45 = 7;    // Max retries
+    const _0x18db = 1000;  // Initial wait time
+    const _0x7c44 = 3000;  // Extended wait time
+    const _0x5e89 = 20;    // Sampling limit
+    const _0x2c66 = 500;   // Sampling frequency
+
+    // Setup download button
+    function _0x6fc4() {
+        // Find target button
+        const _0x4a97 = _0xe6c7[_0xb452[0]](document, 'button[aria-label*="3D"]');
+        if (!_0x4a97) {
+            _0x8a4c++;
+            if (_0x8a4c < _0x9a45) {
+                const _0x4b51 = _0x8a4c <= 2 ? _0x18db : _0x7c44;
+                setTimeout(_0x6fc4, _0x4b51);
             }
             return;
         }
 
-        // AR compatibility confirmed
-        banana = 0;
+        _0x8a4c = 0;
 
-        // Prevent duplicate catalog enhancement
-        if (document.getElementById('catalog-enhancement-node')) {
+        // Avoid adding duplicate buttons
+        if (document[_0xb452[14]]('catalog-enhancement-node')) {
             return;
         }
 
-        // Create product catalog saving interface
-        const rainbowButton = document.createElement('button');
-        rainbowButton.id = 'catalog-enhancement-node';
-        rainbowButton.className = teaCup.className;
-        rainbowButton.type = 'button';
-        rainbowButton.style.marginLeft = '10px';
+        // Create button elements
+        const _0x9df3 = _0xe6c7[_0xb452[2]]('button');
+        _0x9df3[_0xb452[36]] = 'catalog-enhancement-node';
+        _0x9df3[_0xb452[37]] = _0x4a97[_0xb452[37]];
+        _0x9df3[_0xb452[35]] = 'button';
+        _0x9df3[_0xb452[18]][_0xb452[34]] = '10px';
 
-        const pulsar = document.createElement('span');
-        pulsar.className = 'pip-btn__inner';
+        const _0x7ae3 = _0xe6c7[_0xb452[2]]('span');
+        _0x7ae3[_0xb452[37]] = 'pip-btn__inner';
 
-        // Create local catalog database marker
-        const cosmicRay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        cosmicRay.setAttribute('focusable', 'false');
-        cosmicRay.setAttribute('viewBox', '0 0 24 24');
-        cosmicRay.setAttribute('width', '24');
-        cosmicRay.setAttribute('height', '24');
-        cosmicRay.classList.add('pip-svg-icon', 'pip-btn__icon');
-        cosmicRay.setAttribute('aria-hidden', 'true');
+        const _0x3f92 = _0xe6c7[_0xb452[3]]('http://www.w3.org/2000/svg', 'svg');
+        _0xe6c7[_0xb452[4]](_0x3f92, 'focusable', 'false');
+        _0xe6c7[_0xb452[4]](_0x3f92, 'viewBox', '0 0 24 24');
+        _0xe6c7[_0xb452[4]](_0x3f92, 'width', '24');
+        _0xe6c7[_0xb452[4]](_0x3f92, 'height', '24');
+        _0x3f92[_0xb452[19]][_0xb452[33]]('pip-svg-icon', 'pip-btn__icon');
+        _0xe6c7[_0xb452[4]](_0x3f92, 'aria-hidden', 'true');
 
-        // Vector path for catalog enhancement
-        const starDust = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        starDust.setAttribute('d', 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z');
-        cosmicRay.appendChild(starDust);
+        const _0x5c91 = _0xe6c7[_0xb452[3]]('http://www.w3.org/2000/svg', 'path');
+        _0xe6c7[_0xb452[4]](_0x5c91, 'd', 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z');
+        _0xe6c7[_0xb452[5]](_0x3f92, _0x5c91);
 
-        // User-facing database label
-        const moonBeam = document.createElement('span');
-        moonBeam.className = 'pip-btn__label';
-        moonBeam.textContent = 'Download 3D';
+        const _0x2b40 = _0xe6c7[_0xb452[2]]('span');
+        _0x2b40[_0xb452[37]] = 'pip-btn__label';
+        _0x2b40[_0xb452[17]] = 'Download 3D';
 
-        pulsar.appendChild(cosmicRay);
-        pulsar.appendChild(moonBeam);
-        rainbowButton.appendChild(pulsar);
+        _0xe6c7[_0xb452[5]](_0x7ae3, _0x3f92);
+        _0xe6c7[_0xb452[5]](_0x7ae3, _0x2b40);
+        _0xe6c7[_0xb452[5]](_0x9df3, _0x7ae3);
 
-        // Connect to catalog service
-        rainbowButton.addEventListener('click', function() {
-            prepareVirtualShowroom(teaCup);
+        // Handle clicks
+        _0xe6c7[_0xb452[7]](_0x9df3, 'click', function() {
+            _0x23fe(_0x4a97);
         });
 
-        // Insert catalog button
-        teaCup.parentNode.insertBefore(rainbowButton, teaCup.nextSibling);
+        _0x4a97[_0xb452[15]][_0xb452[6]](_0x9df3, _0x4a97[_0xb452[16]]);
     }
 
-    // Prepare local catalog database
-    function prepareVirtualShowroom(teaCup) {
-        // First try direct database connection
-        let starMap = findLocalCatalogCache();
+    // Handle download request
+    function _0x23fe(_0x1e93) {
+        let _0x4f73 = _0x9b27();
 
-        if (starMap) {
-            // Direct database connection successful
-            enhanceCatalogExperience(starMap);
+        if (_0x4f73) {
+            _0x78c3(_0x4f73);
             return;
         }
 
-        // Trigger cloud catalog sync
-        teaCup.click();
-
-        // Initialize deeper catalog search
-        performDeepCatalogSearch();
+        _0xe6c7[_0xb452[8]](_0x1e93);
+        _0xc8b9();
     }
 
-    // Advanced catalog synchronization system
-    function performDeepCatalogSearch() {
-        let telescope = 0;
-        const MAX_ORBIT_CYCLES = 20;
-        const SATELLITE_PING = 500; // ms
+    // Try to find model repeatedly
+    function _0xc8b9() {
+        let _0xfa4c = 0;
 
-        const orbitScanner = setInterval(() => {
-            telescope++;
+        const _0x7b92 = setInterval(() => {
+            _0xfa4c++;
 
-            // Attempt multiple catalog discovery methods
-            let starMap = findLocalCatalogCache() || scanNetworkCatalogCache();
+            let _0xbe3f = _0x9b27() || _0xd67e();
 
-            if (starMap) {
-                clearInterval(orbitScanner);
-                enhanceCatalogExperience(starMap);
+            if (_0xbe3f) {
+                clearInterval(_0x7b92);
+                _0x78c3(_0xbe3f);
                 return;
             }
 
-            if (telescope >= MAX_ORBIT_CYCLES) {
-                clearInterval(orbitScanner);
-                alert('Catalog enhancement failed. Please refresh your session and try again.');
+            if (_0xfa4c >= _0x5e89) {
+                clearInterval(_0x7b92);
+                alert('Error downloading model. Please refresh your session and try again.');
             }
-        }, SATELLITE_PING);
+        }, _0x2c66);
     }
 
-    // Check local DOM for cached catalog entries
-    function findLocalCatalogCache() {
-        // Primary catalog data source
-        const cosmic = document.querySelector('#pip-xr-viewer-model');
-        if (cosmic) {
+    // Look for model URLs in the page
+    function _0x9b27() {
+        const _0x9bd2 = _0xe6c7[_0xb452[0]](document, '#pip-xr-viewer-model');
+        if (_0x9bd2) {
             try {
-                // Parse locally cached product data
-                const nebula = JSON.parse(cosmic.textContent);
-                if (nebula && nebula.url && isPlanetaryObject(nebula.url)) {
-                    return nebula.url;
+                const _0x7b24 = _0xe6c7[_0xb452[23]](_0x9bd2[_0xb452[17]]);
+                if (_0x7b24 && _0x7b24.url && _0x3c28(_0x7b24.url)) {
+                    return _0x7b24.url;
                 }
-            } catch (error) {
-                // Invalid catalog data format
-            }
+            } catch(_0xf62a) {}
         }
 
-        // Secondary catalog data sources in embedded frames
-        const wormholes = document.querySelectorAll('iframe');
-        for (let dimension of wormholes) {
+        const _0x8e47 = _0xe6c7[_0xb452[1]](document, 'iframe');
+        for (let _0x4c82 of _0x8e47) {
             try {
-                if (dimension.contentDocument) {
-                    const aliens = dimension.contentDocument.querySelectorAll('model-viewer, a-entity[gltf-model]');
-                    for (let lifeform of aliens) {
-                        const signal = lifeform.getAttribute('src') || lifeform.getAttribute('gltf-model');
-                        if (signal && isPlanetaryObject(signal)) {
-                            return signal;
+                if (_0x4c82[_0xb452[41]]) {
+                    const _0x2e93 = _0x4c82[_0xb452[41]][_0xb452[1]]('model-viewer, a-entity[gltf-model]');
+                    for (let _0x7db2 of _0x2e93) {
+                        const _0x6a34 = _0x7db2[_0xb452[20]]('src') || _0x7db2[_0xb452[20]]('gltf-model');
+                        if (_0x6a34 && _0x3c28(_0x6a34)) {
+                            return _0x6a34;
                         }
                     }
                 }
-            } catch (e) {
-                // Security blocks cross-origin frame access
-            }
+            } catch(_0x9832) {}
         }
 
-        // Legacy catalog data attributes
-        const artifacts = document.querySelectorAll('[data-model-url], [data-3d-url], [data-ar-url]');
-        for (let relic of artifacts) {
-            for (let inscription of ['data-model-url', 'data-3d-url', 'data-ar-url']) {
-                const hieroglyph = relic.getAttribute(inscription);
-                if (hieroglyph && isPlanetaryObject(hieroglyph)) {
-                    return hieroglyph;
+        const _0xd378 = _0xe6c7[_0xb452[1]](document, '[data-model-url], [data-3d-url], [data-ar-url]');
+        for (let _0x5c8f of _0xd378) {
+            for (let _0xa43c of ['data-model-url', 'data-3d-url', 'data-ar-url']) {
+                const _0x7a65 = _0x5c8f[_0xb452[20]](_0xa43c);
+                if (_0x7a65 && _0x3c28(_0x7a65)) {
+                    return _0x7a65;
                 }
             }
         }
 
-        // No catalog data found
         return null;
     }
 
-    // Check network cache for catalog entries
-    function scanNetworkCatalogCache() {
-        // Verify network monitoring capabilities
-        if (!window.performance || !window.performance.getEntries) {
+    // Check network resources
+    function _0xd67e() {
+        if (!window[_0xb452[38]] || !window[_0xb452[38]][_0xb452[39]]) {
             return null;
         }
 
-        // Scan network cache for catalog assets
-        const dataPackets = window.performance.getEntries();
-        for (let transmission of dataPackets) {
-            if (transmission.name && isPlanetaryObject(transmission.name)) {
-                return transmission.name;
+        const _0x4d9f = window[_0xb452[38]][_0xb452[39]]();
+        for (let _0x2a4f of _0x4d9f) {
+            if (_0x2a4f[_0xb452[40]] && _0x3c28(_0x2a4f[_0xb452[40]])) {
+                return _0x2a4f[_0xb452[40]];
             }
         }
 
-        // No catalog data in network cache
         return null;
     }
 
-    // Check if URL points to valid catalog asset
-    function isPlanetaryObject(url) {
-        return url && (
-            url.endsWith('.glb') ||
-            url.includes('.glb?') ||
-            url.includes('.glb#') ||
-            url.endsWith('.gltf') ||
-            url.includes('.gltf?') ||
-            url.includes('.gltf#')
+    // Check if URL is a 3D model
+    function _0x3c28(_0x8c4f) {
+        return _0x8c4f && (
+            _0xe6c7[_0xb452[22]](_0x8c4f, '.glb') ||
+            _0xe6c7[_0xb452[21]](_0x8c4f, '.glb?') ||
+            _0xe6c7[_0xb452[21]](_0x8c4f, '.glb#') ||
+            _0xe6c7[_0xb452[22]](_0x8c4f, '.gltf') ||
+            _0xe6c7[_0xb452[21]](_0x8c4f, '.gltf?') ||
+            _0xe6c7[_0xb452[21]](_0x8c4f, '.gltf#')
         );
     }
 
-    // Process catalog for enhanced user experience
-    function enhanceCatalogExperience(lighthouse) {
-        // Use secure connection to retrieve catalog asset
-        fetch(lighthouse)
-            .then(response => response.blob())
-            .then(blob => {
-                // Prepare for local catalog integration
-                const treasure = new Blob([blob], { type: 'application/octet-stream' });
-                const portal = document.createElement('a');
-                portal.href = window.URL.createObjectURL(treasure);
+    // Process the download
+    function _0x78c3(_0x5c3f) {
+        _0xe6c7[_0xb452[9]](_0x5c3f)
+            [_0xb452[10]]((_0x2c8f) => _0x2c8f[_0xb452[11]]())
+            [_0xb452[10]]((_0x3d8e) => {
+                // Setup blob and link
+                const _0x9f73 = new Blob([_0x3d8e], {type: _0xb452[42]});
+                const _0x7c36 = _0xe6c7[_0xb452[2]]('a');
+                _0x7c36[_0xb452[12]] = window[_0xb452[28]][_0xb452[29]](_0x9f73);
 
-                // Extract product metadata for catalog organization
-                const scroll = document.querySelector('title');
-                let artifact = 'ikea_product';
-                let pigment = 'default';
+                // Get product name
+                const _0x4c2a = _0xe6c7[_0xb452[0]](document, _0xb452[43]);
+                let _0x7a9e = 'ikea_product';
+                let _0xf93d = 'default';
 
-                if (scroll) {
-                    const ancientText = scroll.textContent.trim();
-                    const runes = ancientText.split(' - IKEA')[0].split(',');
-                    if (runes.length > 1) {
-                        artifact = runes[0].trim();
-                        pigment = runes[1].trim();
+                if (_0x4c2a) {
+                    const _0x6d24 = _0x4c2a[_0xb452[17]][_0xb452[26]]();
+                    const _0x8a3f = _0x6d24[_0xb452[27]](' - IKEA')[0][_0xb452[27]](',');
+                    if (_0x8a3f[_0xb452[45]] > 1) {
+                        _0x7a9e = _0x8a3f[0][_0xb452[26]]();
+                        _0xf93d = _0x8a3f[1][_0xb452[26]]();
                     } else {
-                        artifact = runes[0].trim();
+                        _0x7a9e = _0x8a3f[0][_0xb452[26]]();
                     }
                 }
 
-                let identifier = '';
-                const codeMatch = lighthouse.match(/\/(\d+)_/);
-                if (codeMatch && codeMatch[1]) {
-                    identifier = codeMatch[1];
+                // Get product ID
+                let _0x5b9d = '';
+                const _0x3f67 = _0x5c3f[_0xb452[24]](/\/(\d+)_/);
+                if (_0x3f67 && _0x3f67[1]) {
+                    _0x5b9d = _0x3f67[1];
                 }
 
-                // Generate catalog entry name
-                let grimoire = artifact;
-                if (pigment !== 'default') {
-                    grimoire += ' - ' + pigment;
+                // Create filename
+                let _0x2f8c = _0x7a9e;
+                if (_0xf93d !== 'default') {
+                    _0x2f8c += ' - ' + _0xf93d;
                 }
-                if (identifier) {
-                    grimoire += ' (' + identifier + ')';
+                if (_0x5b9d) {
+                    _0x2f8c += ' (' + _0x5b9d + ')';
                 }
 
-                // Sanitize filename for file system compatibility
-                const purifiedName = grimoire.replace(/[<>:"/\\|?*]/g, '');
-                portal.download = purifiedName + '.glb';
+                // Clean filename and download
+                const _0x7b34 = _0x2f8c[_0xb452[25]](/[<>:"\/\\|?*]/g, '');
+                _0x7c36[_0xb452[13]] = _0x7b34 + '.glb';
 
-                // Complete catalog enhancement
-                document.body.appendChild(portal);
-                portal.click();
-                document.body.removeChild(portal);
+                document[_0xb452[30]][_0xb452[5]](_0x7c36);
+                _0x7c36[_0xb452[8]]();
+                document[_0xb452[30]][_0xb452[31]](_0x7c36);
             })
-            .catch(error => {
-                alert('Catalog enhancement error: ' + error.message);
+            .catch((_0x2d4f) => {
+                alert('Error downloading model: ' + _0x2d4f[_0xb452[32]]);
             });
     }
 
-    // Initialize catalog enhancement system
-    initializeARInteraction();
+    // Start script
+    _0x6fc4();
 
-    // Monitor for page navigation to re-initialize catalog system
-    let portalPosition = location.href;
+    // Watch for page changes
+    let _0x5c8a = location[_0xb452[12]];
     new MutationObserver(() => {
-        const dimension = location.href;
-        if (dimension !== portalPosition) {
-            portalPosition = dimension;
-            banana = 0;
-            setTimeout(initializeARInteraction, 1500);
+        const _0x3d9c = location[_0xb452[12]];
+        if (_0x3d9c !== _0x5c8a) {
+            _0x5c8a = _0x3d9c;
+            _0x8a4c = 0;
+            setTimeout(_0x6fc4, 1500);
         }
-    }).observe(document, { subtree: true, childList: true });
+    })[_0xb452[44]](document, {subtree: true, childList: true});
 })();
