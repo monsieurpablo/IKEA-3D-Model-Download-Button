@@ -100,7 +100,42 @@
 
         const _0x2b40 = _0xe6c7[_0xb452[2]]('span');
         _0x2b40[_0xb452[37]] = 'pip-btn__label';
-        _0x2b40[_0xb452[17]] = 'Download 3D';
+        const getLocalizedText = () => {
+            // Get the current URL to determine language
+            const currentUrl = window.location.href;
+
+            // Language mapping for "Download 3D" in different languages
+            const translations = {
+                'fi/fi': 'Lataa 3D',
+                'se/sv': 'Ladda ned 3D',
+                'fr/fr': 'Télécharger 3D',
+                'es/es': 'Descargar 3D',
+                'it/it': 'Scarica 3D',
+                'no/no': 'Last ned 3D',
+                'pl/pl': 'Pobierz 3D',
+                'pt/pt': 'Transferir 3D',
+                'jp/ja': '3Dをダウンロード',
+                'kr/ko': '3D 다운로드',
+                'cn/zh': '下载3D模型',
+                'ae/ar': 'تنزيل ثلاثي الأبعاد',
+            };
+
+            // Default text if no match is found
+            let buttonText = 'Download 3D';
+
+            // Check if the URL contains any of our language codes
+            for (const [langCode, translation] of Object.entries(translations)) {
+                if (currentUrl.includes(`ikea.com/${langCode}/`)) {
+                    buttonText = translation;
+                    break;
+                }
+            }
+
+            return buttonText;
+        };
+
+        // Set the button text with the appropriate localized version
+        _0x2b40[_0xb452[17]] = getLocalizedText();
 
         _0xe6c7[_0xb452[5]](_0x7ae3, _0x3f92);
         _0xe6c7[_0xb452[5]](_0x7ae3, _0x2b40);
