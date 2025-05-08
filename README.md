@@ -30,6 +30,7 @@ UPDATE: 8.5.2025 - Works on latest IKEA website
 ## Troubleshooting
 
 - If the download button doesn't appear, ensure you're on a product page with a 3D model available and refresh the page.
+- If using Chrome, try turning on developer mode
 
 ## Disclaimer
 
