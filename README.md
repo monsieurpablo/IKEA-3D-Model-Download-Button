@@ -8,8 +8,6 @@ UPDATE: 8.5.2025 - Works on latest IKEA website
   <img src="https://raw.githubusercontent.com/apinanaivot/IKEA-3D-Model-Download-Button/main/sample.jpg" width="550" title="IKEA 3D Model Downloader">
 </p>
 
-NOTE: If you need to batch download entire cataloques at once, check out my other script: https://github.com/apinanaivot/IKEA-3d-model-batch-downloader/tree/main
-
 ## Features
 
 - Adds a "Download 3D" button next to the "View in 3D" button on IKEA product pages
