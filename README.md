@@ -36,6 +36,8 @@ UPDATE: 8.5.2025 - Works on latest IKEA website
 
 This tool is designed for personal home planning and visualization. Always respect IKEA's terms of service and use the saved models only for personal home design projects. The authors are not responsible for any misuse or violation of terms.
 
+## 
+
 
 <a href="https://www.star-history.com/#apinanaivot/IKEA-3D-Model-Download-Button&Date">
  <picture>
