@@ -4,6 +4,7 @@
 // @version      2.0
 // @description  Adds a download button for 3D models on IKEA product pages
 // @match        https://*.ikea.com/*/p/*
+// @match        https://*.ikea.com/*/*/p/*
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
