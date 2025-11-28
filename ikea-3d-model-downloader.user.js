@@ -42,21 +42,23 @@ const ns = v.getAttribute('src'); if(ns && (ns.includes('.glb') || ns.includes('
 vObs.observe(v, {attributes: true}); }
 let rC = 0; const mR = 15;
 function sBtn() {
-const vBtn = document.querySelector('.pip-xr-button');
-if(!vBtn) { rC++; if(rC < mR) setTimeout(sBtn, 1000); return; }
-rC = 0; if(document.getElementById('i-m-d-btn')) return;
-const dBtn = document.createElement('button'); dBtn.id = 'i-m-d-btn'; dBtn.className = vBtn.className;
-dBtn.type = 'button'; dBtn.style.marginLeft = '10px';
-const bIn = document.createElement('span'); bIn.className = 'pip-btn__inner';
-const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('width', '24'); svg.setAttribute('height', '24');
-svg.setAttribute('aria-hidden', 'true'); svg.classList.add('pip-svg-icon', 'pip-btn__icon');
-const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-path.setAttribute('d', 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z'); svg.appendChild(path);
-const lbl = document.createElement('span'); lbl.className = 'pip-btn__label'; lbl.textContent = gTxt();
-bIn.appendChild(svg); bIn.appendChild(lbl); dBtn.appendChild(bIn);
-dBtn.addEventListener('click', function() { hDl(vBtn); });
-vBtn.parentNode.insertBefore(dBtn, vBtn.nextSibling); }
+    const vBtn = document.querySelector('.pipf-xr-button, .pip-xr-button');
+    if(!vBtn) { rC++; if(rC < mR) setTimeout(sBtn, 1000); return; }
+    rC = 0; if(document.getElementById('i-m-d-btn')) return;
+    const p = vBtn.classList.contains('pipf-xr-button') ? 'pipf' : 'pip';
+    const dBtn = document.createElement('button'); dBtn.id = 'i-m-d-btn'; dBtn.className = vBtn.className;
+    dBtn.type = 'button'; dBtn.style.marginLeft = '10px';
+    const bIn = document.createElement('span'); bIn.className = `${p}-btn__inner`;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('width', '24'); svg.setAttribute('height', '24');
+    svg.setAttribute('aria-hidden', 'true'); svg.classList.add(`${p}-svg-icon`, `${p}-btn__icon`);
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z'); svg.appendChild(path);
+    const lbl = document.createElement('span'); lbl.className = `${p}-btn__label`; lbl.textContent = gTxt();
+    bIn.appendChild(svg); bIn.appendChild(lbl); dBtn.appendChild(bIn);
+    dBtn.addEventListener('click', function() { hDl(vBtn); });
+    vBtn.parentNode.insertBefore(dBtn, vBtn.nextSibling);
+}
 function gTxt() {
 const cUrl = window.location.href; const t = {
 'fi/fi': 'Lataa 3D', 'se/sv': 'Ladda ned 3D', 'fr/fr': 'Télécharger 3D', 'es/es': 'Descargar 3D',
