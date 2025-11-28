@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IKEA 3D Model Downloader
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.1
 // @description  Adds a download button for 3D models on IKEA product pages
 // @match        https://*.ikea.com/*/p/*
 // @match        https://*.ikea.com/*/*/p/*
