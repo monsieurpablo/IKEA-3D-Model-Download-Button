@@ -17,7 +17,7 @@ UPDATE: 28.11.2025 - Works on latest IKEA website
 ## Installation
 
 1. Install the [Tampermonkey](https://www.tampermonkey.net/) browser extension for your browser.
-2. Create a new script in Tampermonkey and paste the contents of `ikea-3d-model-downloader.user.js` into it.
+2. Click [this link](https://github.com/apinanaivot/IKEA-3D-Model-Download-Button/raw/refs/heads/main/ikea-3d-model-downloader.user.js) to install or update this script, or alternatively create a new script in Tampermonkey and paste the contents of `ikea-3d-model-downloader.user.js` into it.
 3. Save the script and ensure it's enabled in Tampermonkey.
 
 ## Usage
