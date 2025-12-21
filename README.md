@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=apinanaivot&project=IKEA-3D-Model-Download-Button&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # IKEA 3D Model Downloader
 
 This Tampermonkey script adds a download button for 3D models on IKEA product pages, allowing you to easily save .GLB files of IKEA furniture and decorations. It works across different language versions of IKEA websites and automatically names the downloaded files based on the product name and color. The files can be opened in 3D software like Blender. This allows you to try out the furniture in your own 3D home planning software before making a purchase decision.
