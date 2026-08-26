@@ -2,7 +2,12 @@
 
 This Tampermonkey script adds a download button for 3D models on IKEA product pages, allowing you to easily save .GLB files of IKEA furniture and decorations. It works across different language versions of IKEA websites and automatically names the downloaded files based on the product name and color. The files can be opened in 3D software like Blender. This allows you to try out the furniture in your own 3D home planning software before making a purchase decision.
 
-UPDATE: 30.01.2026 - Bugfix
+UPDATE: 26.08.2026 - v3.0.0 fix (fork)
+
+> Fork of [apinanaivot/IKEA-3D-Model-Download-Button](https://github.com/apinanaivot/IKEA-3D-Model-Download-Button).
+> Upstream stopped working because IKEA's product pages no longer create a `model-viewer`
+> element or fetch the `.glb` in a way the script could intercept. This fork reads the
+> `.glb` URL straight out of the page HTML and grabs the highest-quality variant (`rqp3`).
 
 <p align="left">
   <img src="https://raw.githubusercontent.com/apinanaivot/IKEA-3D-Model-Download-Button/main/sample.jpg" width="550" title="IKEA 3D Model Downloader">
@@ -17,7 +22,7 @@ UPDATE: 30.01.2026 - Bugfix
 ## Installation
 
 1. Install the [Tampermonkey](https://www.tampermonkey.net/) browser extension for your browser.
-2. Click [this link](https://github.com/apinanaivot/IKEA-3D-Model-Download-Button/raw/refs/heads/main/ikea-3d-model-downloader.user.js) to install or update this script, or alternatively create a new script in Tampermonkey and paste the contents of `ikea-3d-model-downloader.user.js` into it.
+2. Click [this link](https://github.com/monsieurpablo/IKEA-3D-Model-Download-Button/raw/refs/heads/main/ikea-3d-model-downloader.user.js) to install or update this script, or alternatively create a new script in Tampermonkey and paste the contents of `ikea-3d-model-downloader.user.js` into it.
 3. Save the script and ensure it's enabled in Tampermonkey.
 4. If you are using a chromium broser, like Chrome, Edge or Opera, turn on developer mode in the browser settings.
 
@@ -30,9 +35,10 @@ UPDATE: 30.01.2026 - Bugfix
 
 ## Troubleshooting
 
-- If the download button doesn't appear, ensure you're on a product page with a 3D model available and refresh the page. You can also try pressing Ctrl + Alt + D if the download button doesn't appear.
+- If the download button doesn't appear, ensure you're on a product page with a 3D model available and refresh the page.
+- On Brave, check that Shields aren't blocking scripts on ikea.com.
 - If using Chrome, turn on developer mode
-- If nothing works, create a [bug report here](https://github.com/apinanaivot/IKEA-3D-Model-Download-Button/issues) and I'll try to fix it as soon as possible
+- If nothing works, create a [bug report here](https://github.com/monsieurpablo/IKEA-3D-Model-Download-Button/issues) and I'll try to fix it as soon as possible
 
 ## Disclaimer
 
